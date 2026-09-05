@@ -1,1 +1,128 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexiCorrect | Domain-Adaptive Legal Spell & Grammar Checker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <span class="brand-badge">AIML-S2-24</span>
+                <h1>LexiCorrect <span>Legal Review Assistant</span></h1>
+            </div>
+            <div class="header-meta">
+                <span class="status-indicator active"></span>
+                <span>BK-Tree + Phonetic Domain Whitelist Active</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-layout">
+        <!-- Controls & Input Panel -->
+        <section class="control-panel card">
+            <div class="panel-header">
+                <h2>Contract Input & Configuration</h2>
+                <div class="actions">
+                    <button id="btnLoadSample" class="btn btn-secondary btn-sm">Load Legal Sample</button>
+                    <button id="btnClear" class="btn btn-outline btn-sm">Clear</button>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group flex-1">
+                    <label for="clauseId">Clause Identifier / Section Number</label>
+                    <input type="text" id="clauseId" placeholder="e.g., Section 8.2 (Indemnification)" value="Section 8.2">
+                </div>
+                <div class="form-group flex-1">
+                    <label for="fileUpload">Batch File Upload (.txt, .csv, .json)</label>
+                    <input type="file" id="fileUpload" accept=".txt,.csv,.json">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="clauseText">Clause Drafting Text</label>
+                <textarea id="clauseText" rows="6" placeholder="Paste legal contract clause, warranty provision, or recital here..."></textarea>
+            </div>
+
+            <div class="panel-footer">
+                <button id="btnAnalyze" class="btn btn-primary">
+                    <span class="icon">⚖</span> Analyze Clause & Validate Legalese
+                </button>
+                <div class="toggle-group">
+                    <label class="switch">
+                        <input type="checkbox" id="toggleWhitelist" checked>
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="toggle-label">Preserve Formulaic Phrasing (Latin & Archaic)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metrics Overview Banner -->
+        <section class="metrics-banner card">
+            <div class="metric-item">
+                <span class="metric-label">Analyzed Clauses</span>
+                <span class="metric-value" id="metricClauses">0</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Flagged Issues</span>
+                <span class="metric-value text-danger" id="metricIssues">0</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Corrections Accepted</span>
+                <span class="metric-value text-success" id="metricResolved">0</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Domain Accuracy Estimate</span>
+                <span class="metric-value text-accent" id="metricConfidence">100%</span>
+            </div>
+        </section>
+
+        <!-- Working Workspace: Inline Review & Issue Resolution -->
+        <div class="workspace-grid">
+            <!-- Left: Flagged Issues Card List -->
+            <section class="issues-panel card">
+                <div class="panel-header">
+                    <h3>Identified Deficiencies & Suggestions</h3>
+                    <span id="issueCounter" class="badge">0 Issues</span>
+                </div>
+                <div id="issuesList" class="issues-container">
+                    <div class="empty-state">
+                        <p>No active errors. Submit clause draft above to run the dual-engine spell and grammar checker.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right: Interactive Diff & Side-by-Side Review -->
+            <section class="review-panel card">
+                <div class="panel-header">
+                    <h3>Side-by-Side Drafting Comparison</h3>
+                    <button id="btnExport" class="btn btn-secondary btn-sm">Copy Corrected Draft</button>
+                </div>
+                <div class="diff-container">
+                    <div class="diff-column">
+                        <h4>Original Clause Draft (With Flagged Tokens)</h4>
+                        <div id="inlineDisplay" class="editor-surface"></div>
+                    </div>
+                    <div class="diff-column">
+                        <h4>Updated Legal Text (Accepted Fixes)</h4>
+                        <div id="correctedDisplay" class="editor-surface final-text"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p>BITS Pilani — Work Integrated Learning Programmes Division | M.Tech AIML (NLP Applications)</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
